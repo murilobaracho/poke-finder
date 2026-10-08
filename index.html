@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cadastro de Pokémon com dados preenchidos pela PokeAPI">
+  <title>Cadastro de Pokémon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="page-header">
+      <span class="eyebrow">Pokédex pessoal</span>
+      <h1>Cadastro de <span>Pokémon</span></h1>
+      <p>Digite o nome de um Pokémon e deixe a API preencher os dados automaticamente.</p>
+    </header>
+
+    <div class="layout-container">
+      <section class="form-container" aria-labelledby="form-title">
+        <div class="form-heading">
+          <div class="heading-icon">✦</div>
+          <div>
+            <h2 id="form-title">Novo cadastro</h2>
+            <p>Os dados são consultados na PokeAPI.</p>
+          </div>
+        </div>
+
+        <form id="idformulario" novalidate>
+          <label for="nomePokemon">Nome do Pokémon</label>
+          <div class="input-with-status">
+            <input type="text" id="nomePokemon" list="sugestoesPokemon" placeholder="Ex.: Pikachu" autocomplete="off" required>
+            <span id="statusBusca" class="status-busca" aria-live="polite"></span>
+          </div>
+          <datalist id="sugestoesPokemon"></datalist>
+
+          <label for="tipoPokemon">Tipo</label>
+          <input type="text" id="tipoPokemon" placeholder="Preenchido pela API" readonly>
+
+          <label for="treinadorPokemon">Nome do treinador <small>(opcional)</small></label>
+          <input type="text" id="treinadorPokemon" placeholder="Ex.: Ash Ketchum" autocomplete="name">
+
+          <label for="poderPokemon">CP / Poder</label>
+          <input type="number" id="poderPokemon" placeholder="Preenchido pela API" readonly required>
+
+          <div class="botoes">
+            <button id="botao" type="submit">Adicionar Pokémon</button>
+            <button id="botaolimpar" type="button">Limpar tudo</button>
+          </div>
+        </form>
+        <p id="IdFeedback" class="feedback" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="cards-section" aria-labelledby="cards-title">
+        <div class="cards-heading">
+          <div>
+            <span class="eyebrow">Sua coleção</span>
+            <h2 id="cards-title">Pokémon cadastrados</h2>
+          </div>
+          <span id="contadorCards" class="contador">0</span>
+        </div>
+        <div id="listaCards" class="cards-grid">
+          <div id="estadoVazio" class="estado-vazio">
+            <span class="pokeball">◒</span>
+            <p>Nenhum Pokémon cadastrado ainda.</p>
+            <small>Preencha o formulário para começar.</small>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
