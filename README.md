@@ -32,19 +32,6 @@ python3 -m http.server 8000
 
 Depois, acesse <http://localhost:8000>.
 
-## Publicar no GitHub Pages
-
-1. Crie um repositório público chamado `poke-finder` no GitHub.
-2. Envie `index.html`, `style.css`, `script.js` e `README.md` para a raiz do repositório.
-3. Acesse **Settings > Pages**.
-4. Em **Build and deployment**, selecione **Deploy from a branch**.
-5. Escolha a branch `main` e a pasta `/ (root)`.
-6. Clique em **Save**.
-
-O endereço ficará semelhante a:
-
-```text
-https://SEU-USUARIO.github.io/poke-finder/
 ```
 
 ## Observação sobre o poder
