@@ -311,9 +311,10 @@ button:active {
 
 .card-pokemon-nome {
   margin: 0 0 12px;
-  color: #0f172a;
+  color: #111827 !important;
   font-size: 20px;
   font-weight: 700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
   text-transform: capitalize;
 }
 
@@ -347,9 +348,10 @@ button:active {
 .treinador {
   display: block;
   margin: 13px 0 0;
-  color: #1e293b;
+  color: #111827 !important;
   font-size: 13px;
   font-weight: 600;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .3);
 }
 
 @media (max-width: 780px) {
