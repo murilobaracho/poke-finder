@@ -1,46 +1,33 @@
-# Poke Finder
+# ⚡ Poke Finder
 
-Aplicação web estática para buscar Pokémon na [PokeAPI](https://pokeapi.co/) e criar cards personalizados com nome, tipo, poder, imagem e treinador.
+> Aplicação web leve e responsiva para buscar Pokémon via **PokeAPI** e gerar cards personalizados com estatísticas e dados do treinador.
 
-## Funcionalidades
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![PokeAPI](https://img.shields.io/badge/PokeAPI-EF5350?style=for-the-badge&logo=pokemon&logoColor=white)
 
-- Busca automática de Pokémon pela PokeAPI.
-- Preenchimento automático do tipo e do poder/base experience.
-- Criação de cards somente após o cadastro.
-- Exibição da imagem oficial do Pokémon.
-- Campo opcional para o nome do treinador.
-- Contador de Pokémon cadastrados.
-- Botão para limpar o formulário e remover todos os cards.
-- Layout responsivo para computador e celular.
-- Sem backend ou instalação de dependências.
+---
 
-## Arquivos
+## 📌 Demonstração & Visão Geral
+
+O **Poke Finder** consome a PokeAPI em tempo real para permitir que o usuário crie e gerencie seus próprios cards de Pokémon sem a necessidade de banco de dados ou dependências externas.
+
+### ✨ Funcionalidades Principais
+
+- 🔍 **Busca Automática:** Consumo dinâmico da PokeAPI ao digitar ou selecionar um Pokémon.
+- 📊 **Preenchimento Inteligente:** Preenche automaticamente o **tipo** e o **poder** (*Base Experience*).
+- 🖼️ **Arte Oficial:** Exibe a sprite/imagem oficial do Pokémon no card.
+- 🧢 **Personalização:** Campo para incluir o nome do treinador responsável pelo card.
+- 🧮 **Contador Dinâmico:** Atualização em tempo real da quantidade de cards criados.
+- 🧹 **Gestão Prática:** Botões para limpar formulário e remover cards individualmente ou em lote.
+- 📱 **Totalmente Responsivo:** Interface otimizada tanto para telas mobile quanto desktop.
+
+---
+
+## 📂 Estrutura do Projeto
 
 ```text
-index.html  # Estrutura da página
-style.css   # Estilos e layout
-script.js   # Integração com a PokeAPI e lógica dos cards
-```
-
-## Como executar localmente
-
-Basta abrir o arquivo `index.html` no navegador. Para evitar restrições do navegador em alguns ambientes, também é possível iniciar um servidor local:
-
-```bash
-python3 -m http.server 8000
-```
-
-Depois, acesse <http://localhost:8000>.
-
-```
-
-## Observação sobre o poder
-
-A PokeAPI não fornece um campo oficial de CP. Por isso, o projeto utiliza `base_experience` como valor de poder exibido no card.
-
-## Tecnologias
-
-- HTML5
-- CSS3
-- JavaScript puro
-- PokeAPI
+├── index.html  # Estrutura e marcação da aplicação
+├── style.css   # Estilização, variáveis e responsividade
+└── script.js   # Lógica de consumo da API e manipulação do DOM
