@@ -53,6 +53,7 @@ button {
 
 h1 {
   margin: 8px 0 10px;
+  color: #ffffff;
   font-size: clamp(32px, 5vw, 52px);
   letter-spacing: -1.5px;
   line-height: 1;
@@ -100,7 +101,9 @@ h1 span {
 
 h2 {
   margin: 0;
+  color: #ffffff;
   font-size: 21px;
+  font-weight: 700;
 }
 
 .form-heading p {
@@ -310,6 +313,7 @@ button:active {
   margin: 0 0 12px;
   color: #ffffff;
   font-size: 20px;
+  font-weight: 700;
   text-transform: capitalize;
 }
 
@@ -343,8 +347,9 @@ button:active {
 .treinador {
   display: block;
   margin: 13px 0 0;
-  color: #e2e8f0;
+  color: #ffffff;
   font-size: 13px;
+  font-weight: 600;
 }
 
 @media (max-width: 780px) {
