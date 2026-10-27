@@ -10,21 +10,15 @@
 <body>
   <main class="app-shell">
     <header class="page-header">
-      <span class="eyebrow">Pokédex pessoal</span>
       <h1>Cadastro de <span>Pokémon</span></h1>
-      <p>Digite o nome de um Pokémon e deixe a API preencher os dados automaticamente.</p>
     </header>
 
     <div class="layout-container">
       <section class="form-container" aria-labelledby="form-title">
         <div class="form-heading">
-          <div>
-            <h2 id="form-title">Novo cadastro</h2>
-            <p>Os dados são consultados na PokeAPI.</p>
-          </div>
         </div>
 
-        <form id="idformulario" novalidate>
+        <form id="idformulario">
           <label for="nomePokemon">Nome do Pokémon</label>
           <div class="input-with-status">
             <input type="text" id="nomePokemon" list="sugestoesPokemon" placeholder="Ex.: Pikachu" autocomplete="off" required>
@@ -52,7 +46,6 @@
       <section class="cards-section" aria-labelledby="cards-title">
         <div class="cards-heading">
           <div>
-            <span class="eyebrow">Sua coleção</span>
             <h2 id="cards-title">Pokémon cadastrados</h2>
           </div>
           <span id="contadorCards" class="contador">0</span>
