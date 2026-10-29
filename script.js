@@ -151,9 +151,9 @@ form.addEventListener('submit', async (event) => {
     combatPower: extrairCombatPower(pokemonAtual),
     treinador: treinadorInput.value,
     id: buscarDadosPokemon.id
+    
 
-
-
+    
   });
 
   mostrarFeedback(`${formatarNome(pokemonAtual.name)} foi cadastrado com sucesso!`, 'success');
