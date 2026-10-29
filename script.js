@@ -9,11 +9,19 @@ const contadorCards = document.querySelector('#contadorCards');
 const estadoVazio = document.querySelector('#estadoVazio');
 const statusBusca = document.querySelector('#statusBusca');
 
+// const dadomockado = {name: 'pikachu', types: [ {slot: 1, type: {name: 'eletric'}}], sprites: {
+//     front_default: './pikachu.png',
+//     other: {
+//         'official-artwork': {
+//             front_default:'./pikachu.png'
+//         }
+//     }
+// }, base_experience: '112'}
+
 const URL_POKEAPI = 'https://pokeapi.co/api/v2/pokemon';
 let debounceBusca;
 let controladorBusca;
 let pokemonAtual = null;
-let pokemonsCadastrados = [];
 
 function mostrarFeedback(mensagem = '', tipo = '') {
   feedback.textContent = mensagem;
@@ -24,22 +32,19 @@ function normalizarNome(nome) {
   return nome.toLowerCase().trim().replaceAll(' ', '-');
 }
 
-function formatarNome(nome) {
-  return nome.charAt(0).toUpperCase() + nome.slice(1);
-}
-
 async function buscarDadosPokemon(nome) {
   controladorBusca?.abort();
   controladorBusca = new AbortController();
-  const resposta = await fetch(`${URL_POKEAPI}/${normalizarNome(nome)}`, {
-    signal: controladorBusca.signal
-  });
+  const resposta = await fetch(`${URL_POKEAPI}/${normalizarNome(nome)}`, { signal: controladorBusca.signal });
+
   if (!resposta.ok) throw new Error('Pokémon não encontrado.');
   return resposta.json();
 }
 
 function extrairImagemPokemon(dados) {
-  return dados?.sprites?.other?.['official-artwork']?.front_default || dados?.sprites?.front_default || '';
+  return dados?.sprites?.other?.['official-artwork']?.front_default
+    || dados?.sprites?.front_default
+    || '';
 }
 
 function extrairTiposPokemon(dados) {
@@ -47,6 +52,7 @@ function extrairTiposPokemon(dados) {
 }
 
 function extrairCombatPower(dados) {
+  //base_experience é usado como poder
   return dados?.base_experience ?? 0;
 }
 
@@ -58,6 +64,9 @@ function preencherFormulario(dados) {
   statusBusca.className = 'status-busca success';
   mostrarFeedback('Dados preenchidos pela PokeAPI. Agora você pode cadastrar o Pokémon.', 'info');
 }
+
+
+
 
 async function completarDados(nome) {
   const nomeConsultado = nome.trim();
@@ -74,7 +83,7 @@ async function completarDados(nome) {
   mostrarFeedback('Buscando dados na PokeAPI…', 'info');
 
   try {
-    const dados = await buscarDadosPokemon(nomeConsultado);
+    const dados = /*dadomockado*/ await buscarDadosPokemon(nomeConsultado);
     if (normalizarNome(nomeInput.value) !== dados.name) return;
     preencherFormulario(dados);
   } catch (error) {
@@ -100,6 +109,7 @@ nomeInput.addEventListener('input', () => {
     mostrarFeedback('Digite pelo menos 3 caracteres para buscar.', 'info');
     return;
   }
+
   debounceBusca = setTimeout(() => completarDados(valor), 550);
 });
 
@@ -108,7 +118,7 @@ nomeInput.addEventListener('change', () => completarDados(nomeInput.value));
 form.addEventListener('submit', async (event) => {
   event.preventDefault();
   const nome = nomeInput.value.trim();
-  const nomeNormalizado = normalizarNome(nome);
+  const treinador = treinadorInput.value.trim();
 
   if (nome.length < 3) {
     mostrarFeedback('O nome deve conter pelo menos 3 caracteres.', 'error');
@@ -116,13 +126,14 @@ form.addEventListener('submit', async (event) => {
     return;
   }
 
-  if (pokemonsCadastrados.includes(nomeNormalizado)) {
-    mostrarFeedback(`Este Pokémon (${formatarNome(nomeNormalizado)}) já foi cadastrado!`, 'error');
-    nomeInput.focus();
+  const idPokemon = normalizarNome(nome);
+  if (verificarAntes(idPokemon)) {
+    mostrarFeedback(`O Pokémon ${formatarNome(nome)} já está cadastrado na lista!`);
     return;
   }
 
-  if (!pokemonAtual || nomeNormalizado !== pokemonAtual.name) {
+  // Se o usuário clicar em cadastrar antes do debounce terminar, conclui a busca.
+  if (!pokemonAtual || normalizarNome(nome) !== pokemonAtual.name) {
     try {
       mostrarFeedback('Finalizando a busca dos dados…', 'info');
       const dados = await buscarDadosPokemon(nome);
@@ -133,18 +144,19 @@ form.addEventListener('submit', async (event) => {
     }
   }
 
-  pokemonsCadastrados.push(pokemonAtual.name);
-  
   criarCardPokemon({
     nome: pokemonAtual.name,
     imagem: extrairImagemPokemon(pokemonAtual),
     tipo: extrairTiposPokemon(pokemonAtual),
     combatPower: extrairCombatPower(pokemonAtual),
-    treinador: treinadorInput.value
+    treinador: treinadorInput.value,
+    id: buscarDadosPokemon.id
+
+
+
   });
 
   mostrarFeedback(`${formatarNome(pokemonAtual.name)} foi cadastrado com sucesso!`, 'success');
-  
   form.reset();
   tipoInput.value = '';
   poderInput.value = '';
@@ -152,20 +164,22 @@ form.addEventListener('submit', async (event) => {
   statusBusca.className = 'status-busca';
 });
 
-function criarCardPokemon({ nome, imagem, tipo, combatPower, treinador }) {
-  if (estadoVazio && estadoVazio.parentNode) {
-    estadoVazio.remove();
-  }
+function formatarNome(nome) {
+  return nome.charAt(0).toUpperCase() + nome.slice(1);
+}
+
+function criarCardPokemon({ nome, imagem, tipo, combatPower, treinador, id }) {
+  estadoVazio?.remove();
 
   const card = document.createElement('article');
   card.className = 'card-pokemon';
-  
-  const nomeNormalizado = nome.toLowerCase().trim();
+  card.id = normalizarNome(nome);
+
   const listaDeTiposDoPokemon = tipo.split(',').map(t => t.trim().toLowerCase());
   aplicarEstiloPorTipo(card, listaDeTiposDoPokemon);
 
   const img = document.createElement('img');
-  img.src = imagem || 'https://placehold.co';
+  img.src = imagem || 'https://placehold.co/180x180/171d35/cbd5e1?text=?';
   img.alt = `Imagem de ${formatarNome(nome)}`;
   img.loading = 'lazy';
 
@@ -178,59 +192,50 @@ function criarCardPokemon({ nome, imagem, tipo, combatPower, treinador }) {
 
   const tipoBadge = document.createElement('p');
   tipoBadge.className = 'tipo-badge';
-  tipoBadge.textContent = 'Tipo: ' + (tipo || 'desconhecido');
-
-  const apagarCard = document.createElement('span');
-  apagarCard.className = 'apagar-card';
-  apagarCard.textContent = '🗑️';
-  apagarCard.style.cursor = 'pointer';
+  tipoBadge.textContent = 'Tipo: ' + tipo || 'desconhecido';
 
   const cpBadge = document.createElement('span');
   cpBadge.className = 'cp-badge';
-  cpBadge.textContent = ` CP: ${combatPower || 0}`;
-
-  meta.append(tipoBadge, cpBadge, apagarCard);
-  card.append(img, nomeCard, meta);
+  cpBadge.textContent = `\n CP: ${combatPower || 0}`;
+  meta.append(tipoBadge, cpBadge);
 
   const treinadorEl = document.createElement('span');
   treinadorEl.className = 'treinador';
   treinadorEl.textContent = treinador ? `Treinador: ${treinador}` : `Treinador: Sem Treinador`;
-  card.appendChild(treinadorEl);
+
+  const botaoDeletar = document.createElement('button');
+  botaoDeletar.className = 'btn-deletar';
+  botaoDeletar.textContent = 'Excluir';
+  botaoDeletar.onclick = () => {
+    card.remove();
+
+    contadorCards.textContent = listaCards.querySelectorAll('.card-pokemon').length;
+    mostrarFeedback(`${formatarNome(nome)} removido com sucesso!`);
+
+  };
+
+
+  card.append(img, nomeCard, meta, treinadorEl, botaoDeletar);
 
   listaCards.appendChild(card);
   contadorCards.textContent = listaCards.querySelectorAll('.card-pokemon').length;
-
-  apagarCard.addEventListener('click', () => {
-    excluirCard(card, nomeNormalizado);
-  });
-}
-
-function excluirCard(card, nomePokemon) {
-  card.remove();
-  pokemonsCadastrados = pokemonsCadastrados.filter(nome => nome !== nomePokemon);
-
-  const totalCards = listaCards.querySelectorAll('.card-pokemon').length;
-  contadorCards.textContent = totalCards;
-
-  if (totalCards === 0 && estadoVazio) {
-    listaCards.appendChild(estadoVazio);
-  }
-  
-  mostrarFeedback('Pokémon removido com sucesso.', 'info');
 }
 
 function aplicarEstiloPorTipo(card, tipos) {
   const estiloCard = {
     normal: { borda: '#7f8c8d', fundo: '#ececec' },
     water: { borda: '#2980d9', fundo: '#dcecff' },
-    grass: { borda: '#3a9d3a', fundo: '#26ff00' },
+    grass: { borda: '#3a9d3a', fundo: '#26ff00' }, 
     electric: { borda: '#d4a800', fundo: '#fff7c2' },
     poison: { borda: '#8e44ad', fundo: '#ae00ff' },
     fire: { borda: '#e25822', fundo: '#ffe3d6' }
   };
 
-  const estilo1 = estiloCard[tipos[0]] || estiloCard.normal;
-  const estilo2 = estiloCard[tipos[1]];
+
+  const listaTipos = (tipos);
+
+  const estilo1 = estiloCard[listaTipos[0]];
+  const estilo2 = estiloCard[listaTipos[1]];
 
   card.style.borderColor = estilo1.borda;
 
@@ -246,15 +251,26 @@ document.querySelector('#botaolimpar').addEventListener('click', () => {
   controladorBusca?.abort();
   form.reset();
   pokemonAtual = null;
-  pokemonsCadastrados = [];
   listaCards.innerHTML = '';
-  
-  if (estadoVazio) {
-    listaCards.appendChild(estadoVazio);
-  }
-  
+  listaCards.appendChild(estadoVazio);
   contadorCards.textContent = '0';
   statusBusca.className = 'status-busca';
   mostrarFeedback('Formulário e cards limpos com sucesso.', 'success');
   nomeInput.focus();
 });
+
+
+function verificarAntes(id) {
+
+  const verificarCards = document.querySelectorAll('.card-pokemon');
+  console.log("Cards encontrados na tela:", verificarCards);
+
+
+  let existe = Array.from(verificarCards).some(card => {
+    console.log("Comparando card id:", card.id, "com o ID buscado:", id);
+    return card.id === id;
+  });
+
+  console.log("O Pokémon já existe na lista?", existe);
+  return existe;
+}
