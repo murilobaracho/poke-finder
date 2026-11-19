@@ -1,4 +1,4 @@
-# ⚡ Poke Finder
+# ⚡ Poke Finder  
 
 > Aplicação web leve e responsiva para buscar Pokémon via **PokeAPI** e gerar cards personalizados com estatísticas e dados do treinador.
 
